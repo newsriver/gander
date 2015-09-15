@@ -19,16 +19,8 @@ object ContentExtractor {
 
   val logger: Logger = LoggerFactory.getLogger(getClass)
 
-  def extractTitle(doc: Document): String = {
-    val titleElem = byTag("title")(doc)
-    titleElem.headOption.map { x =>
-      val titleText = x.text
-      List(" | ", " - ", " » ", " · ").collectFirst {
-        case separator if titleText.contains(separator) => titleText.split(Pattern.quote(separator)).head
-      }.getOrElse(titleText)
-    }.getOrElse("")
-     .replace("&#65533;", "").trim
-  }
+  def extractTitle(doc: Document): String =
+    byTag("title")(doc).headOption.map(_.text).getOrElse("").replace("&#65533;", "").trim
 
   def extractLang(doc: Document): Option[String] =
     byTag("html")(doc).headOption.map(_.attr("lang")).filter(_.nonEmpty).orElse(
