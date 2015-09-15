@@ -17,6 +17,48 @@ class ContentExtractorSpec extends Specification {
     }
   }
 
+  "extractCanonicalLink" >> {
+    "should return none if no link found" >> {
+      val html =
+        """<html lang="ca">
+          |  <head>
+          |  </head>
+          |<body></body></html>""".stripMargin
+      extractCanonicalLink(Jsoup.parse(html)) must beNone
+    }
+
+    "should extract the canonical link from the meta tag" >> {
+      val html =
+        """<html lang="ca">
+          |  <head>
+          |    <link rel="canonical" href="http://example.com/canonical">
+          |    <meta property="og:url" content="http://example.com/og" />
+          |    <meta name="twitter:url" content="http://example.com/twitter" />
+          |  </head>
+          |<body></body></html>""".stripMargin
+      extractCanonicalLink(Jsoup.parse(html)) must beSome("http://example.com/canonical")
+    }
+    "should extract the facebook og:url meta tag" >> {
+      val html =
+        """<html lang="ca">
+          |  <head>
+          |    <meta property="og:url" content="http://example.com/og" />
+          |    <meta name="twitter:url" content="http://example.com/twitter" />
+          |  </head>
+          |<body></body></html>""".stripMargin
+      extractCanonicalLink(Jsoup.parse(html)) must beSome("http://example.com/og")
+    }
+    "should extract the twitter:url meta tag" >> {
+      val html =
+        """<html lang="ca">
+          |  <head>
+          |    <meta name="twitter:url" content="http://example.com/twitter" />
+          |  </head>
+          |<body></body></html>""".stripMargin
+      extractCanonicalLink(Jsoup.parse(html)) must beSome("http://example.com/twitter")
+    }
+  }
+
   "extractLang" >> {
     "should extract lang from html tag and give priority to it" >> {
       val html =
