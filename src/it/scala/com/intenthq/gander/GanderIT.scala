@@ -171,7 +171,6 @@ class GanderIT extends Specification {
 
   }
 
-  tag("barc")
   "fcbarcelona" >> {
     val url = "http://www.fcbarcelona.com/club/detail/article/30-years-since-visit-of-pope-john-paul-ii"
 
@@ -181,6 +180,21 @@ class GanderIT extends Specification {
       title       = "30 years since visit of Pope John Paul II | FC Barcelona",
       metaDescription = "This Wednesday is the 30th anniversary of mass given by Pope John Paul at the Camp Nou",
       metaKeywords = "Josep Lluís Núñez, Camp Nou, Club, Season 2012-2013",
+      lang = Some("en"),
+      date = None,
+      links =  List()
+    )
+  }
+
+  "Daily Mail (malformed date caused crash)" >> {
+    val url = "http://www.dailymail.co.uk/news/article-486484/A-spectacular-destruction-How-email-led-downfall-barrister-all.html"
+
+    check(extract(url),
+      url = url,
+      content     = "by PAUL BRACCHI Last updated at 01:01 09 October 2007 An Oxford First, a brilliant radio career and newly qualified as a barrister, Bruce Hyman seemed to have all life's gifts",
+      title       = "A spectacular destruction: How one email led to the downfall of a barrister who had it all | Daily Mail Online",
+      metaDescription = "An Oxford First, a brilliant radio career and newly qualified as a barrister, Bruce Hyman seemed to have all life's gifts  -  until a moment of utter madness put him behind bars and left his life in ruins",
+      metaKeywords = "A,spectacular,destruction,How,email,led,downfall,barrister,all",
       lang = Some("en"),
       date = None,
       links =  List()
