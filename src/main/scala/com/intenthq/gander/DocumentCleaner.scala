@@ -17,7 +17,8 @@ object DocumentCleaner {
    */
   private val regExRemoveNodes = "^side$|combx|retweet|mediaarticlerelated|menucontainer|navbar|comment(?!ed)|PopularQuestions|contact|footer|Footer|footnote|cnn_strycaptiontxt|links|meta$|scroll(?!able)|shoutbox|sponsor" +
     "|tags|socialnetworking|socialNetworking|cnnStryHghLght|cnn_stryspcvbx|^inset$|pagetools|post-attributes|welcome_form|contentTools2|the_answers|remember-tool-tip" +
-    "|communitypromo|promo_holder|runaroundLeft|subscribe|vcard|articleheadings|date|^print$|popup|author-dropdown|tools|socialtools|byline|konafilter|KonaFilter|breadcrumbs|^fn$|wp-caption-text"
+    "|communitypromo|promo_holder|runaroundLeft|subscribe|vcard|articleheadings|date|^print$|popup|author-dropdown|tools|socialtools|byline|konafilter|KonaFilter|breadcrumbs|^fn$" +
+    "|wp-caption-text|overlay"
   private val queryNaughtyIDs = "[id~=(" + regExRemoveNodes + ")]"
   private val queryNaughtyClasses = "[class~=(" + regExRemoveNodes + ")]"
   private val queryNaughtyNames = "[name~=(" + regExRemoveNodes + ")]"
