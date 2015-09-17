@@ -61,14 +61,15 @@ class GanderIT extends Specification {
     val url = "http://www.bbc.co.uk/sport/0/football/34203622"
     check(extract(url),
       url = url,
-      content = "Manchester City striker Sergio Aguero will miss Tuesday's Champions League opener against Juventus at Etihad Stadium because of a knee injury",
-      title = "BBC Sport - Sergio Aguero: Manchester City striker to miss Juventus visit",
-      metaDescription = "Manchester City striker Sergio Aguero will miss Tuesday's Champions League opener against Juventus with a knee injury.",
+      content = "Manchester City's Champions League campaign got off to a disappointing start with a home defeat by last season's runners-up Juventus. City, who have struggled to make a serious impact in the Champions League and have never won their opening home game in the group stage, looked to be on course for victory when Juventus defender Giorgio Chiellini headed into his own net under pressure from Vincent Kompany.",
+      title = "BBC Sport - Alvaro Morata & Mario Mandzukic score as Juventus shock Man City",
+      metaDescription = "Manchester City concede two goals in the last 20 minutes as Juventus fight back from a goal down to win at Etihad Stadium.",
       metaKeywords = "BBC, Sport, BBC Sport, bbc.co.uk, world, uk, international, foreign, british, online, service",
       lang = Some("en-GB"),
       date = None,
-      links = List(Link("City's 1-0 win at Crystal Palace", "http://m.bbc.co.uk/sport/football/34160754"),
-                   Link("losing 3-1 on aggregate", "http://www.bbc.co.uk/sport/0/football/31922160")))
+      links = List(Link("- they reached last season's final -", "http://www.bbc.co.uk/sport/0/football/33010277"),
+                   Link("£49m move to Manchester City from Liverpool -", "http://www.bbc.co.uk/sport/0/football/33497488"))
+    )
   }
 
   "businessinsider" >> {
@@ -168,6 +169,22 @@ class GanderIT extends Specification {
                     locale = None,
                     publishedTime = Some(new DateTime(2015, 7, 29, 0, 0)))
 
+  }
+
+  tag("barc")
+  "fcbarcelona" >> {
+    val url = "http://www.fcbarcelona.com/club/detail/article/30-years-since-visit-of-pope-john-paul-ii"
+
+    check(extract(url),
+      url = url,
+      content     = "On November 7, 1982, the Camp Nou enjoyed a historic moment.",
+      title       = "30 years since visit of Pope John Paul II | FC Barcelona",
+      metaDescription = "This Wednesday is the 30th anniversary of mass given by Pope John Paul at the Camp Nou",
+      metaKeywords = "Josep Lluís Núñez, Camp Nou, Club, Season 2012-2013",
+      lang = Some("en"),
+      date = None,
+      links =  List()
+    )
   }
 
 }
