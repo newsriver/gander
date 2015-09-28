@@ -16,9 +16,10 @@ class GanderIT extends Specification {
     Gander.extract(rawHTML).get
   }
 
-  def check(pageInfo: PageInfo, title: String, metaDescription: String, metaKeywords: String,
+  def check(pageInfo: PageInfo, title: String, processedTitle: String, metaDescription: String, metaKeywords: String,
             lang: Option[String], date: Option[String], content: String, url: String, links: Seq[Link]) = {
     pageInfo.title must_== title
+    pageInfo.processedTitle must_== processedTitle
     pageInfo.metaDescription must_== metaDescription
     pageInfo.metaKeywords must_== metaKeywords
     pageInfo.lang must_== lang
@@ -34,6 +35,7 @@ class GanderIT extends Specification {
       url = url,
       content = "Here at Intent HQ we believe how important it is to write good code. Why? First, because writing good code is much cheaper and more fun than writing bad code. Second, because if you write good code chances are that the product you are building will be much better. Third, and more important, because writing good code is what we are supposed to do: after all, we are getting paid for doing our job well",
       title = "What is good code? A scientific definition. - Intent HQ Engineering blog",
+      processedTitle = "What is good code? A scientific definition.",
       metaDescription = "How would you define good code? This article gives a pseudo-scientific answer to that question after asking a sample of 65 developers that same question.",
       metaKeywords = "",
       lang = Some("en-GB"),
@@ -48,6 +50,7 @@ class GanderIT extends Specification {
       url = url,
       content = "Disneyland Paris is facing a pricing probe following accusations that UK and German customers are being frozen out of certain price promotions.",
       title = "Disneyland Paris faces pricing probe - BBC News",
+      processedTitle = "Disneyland Paris faces pricing probe",
       metaDescription = "Disneyland Paris is facing a pricing probe following accusations that UK and German customers are being frozen out of promotions available in other European member states.",
       metaKeywords = "",
       lang = Some("en"),
@@ -63,6 +66,7 @@ class GanderIT extends Specification {
       url = url,
       content = "Manchester City's Champions League campaign got off to a disappointing start with a home defeat by last season's runners-up Juventus. City, who have struggled to make a serious impact in the Champions League and have never won their opening home game in the group stage, looked to be on course for victory when Juventus defender Giorgio Chiellini headed into his own net under pressure from Vincent Kompany.",
       title = "BBC Sport - Alvaro Morata & Mario Mandzukic score as Juventus shock Man City",
+      processedTitle = "Alvaro Morata & Mario Mandzukic score as Juventus shock Man City",
       metaDescription = "Manchester City concede two goals in the last 20 minutes as Juventus fight back from a goal down to win at Etihad Stadium.",
       metaKeywords = "BBC, Sport, BBC Sport, bbc.co.uk, world, uk, international, foreign, british, online, service",
       lang = Some("en-GB"),
@@ -78,6 +82,7 @@ class GanderIT extends Specification {
       url = url,
       content = "From Goldman on the FOMC operation twist announcement: ------------- 1. As we had expected, the Federal Open Market Committee decided to \"do the twist\" and increase the duration of its securities holdings by selling shorter-maturity securities ($400bn of Treasuries with maturity of 3 years or less)",
       title = "GOLDMAN: 4 Key Points On The FOMC Announcement - Business Insider",
+      processedTitle = "GOLDMAN: 4 Key Points On The FOMC Announcement",
       metaDescription = "Here it is.",
       metaKeywords = "",
       lang = Some("en"),
@@ -91,6 +96,7 @@ class GanderIT extends Specification {
       url = url,
       content = "Los aliados de la OTAN ofrecieron este martes respaldo político a Turquía en su ofensiva contra el Estado Islámico tras una reunión convocada de urgencia por el Gobierno de Ankara.",
       title = "La OTAN apoya con cautela la ofensiva turca contra el yihadismo | Internacional | EL PAÍS"                                                                                                                        ,
+      processedTitle = "La OTAN apoya con cautela la ofensiva turca contra el yihadismo",
       metaDescription = "La Alianza se ha reunido este martes con carácter de urgencia a pedición de Ankara para tratar el avance del Estado Islámico",
       metaKeywords = "otan, apoyar, cautela, ofensiva, turca, turco, yihadismo, alianza, haber, reunir, martes, urgencia, pedición, ankara, secretario, general, jens stoltenberg, resaltar, unidad, aliado",
       lang = Some("es"),
@@ -109,6 +115,7 @@ class GanderIT extends Specification {
       url = url,
       content = "ROMA La strada è tracciata, la relazione potrebbe arrivare a Palazzo Chigi prima della pausa estiva. Il ministro dell’Interno Angelino Alfano non proporrà lo scioglimento per mafia del comune di Roma, ma nella relazione al governo",
       title = "La relazione di Alfano sulla mafia: fatti gravi, il sindaco ha sottovalutato - Corriere.it",
+      processedTitle = "La relazione di Alfano sulla mafia: fatti gravi, il sindaco ha sottovalutato",
       metaDescription = "Non si propone lo scioglimento ma si lascia aperta la possibilità di una «diversa valutazione»",
       metaKeywords = "Ignazio Marino, Angelino Alfano",
       lang = Some("it"),
@@ -136,6 +143,7 @@ class GanderIT extends Specification {
       url = url,
       content = "No próximo sábado, o São Paulo jogará, como mandante, na Arena Barueri diante do Mogi Mirim",
       title = "Para Leão, Arena Barueri não é casa do Tricolor - São Paulo | Lancenet.com.br",
+      processedTitle = "Para Leão, Arena Barueri não é casa do Tricolor - São Paulo",
       metaDescription = "No próximo sábado, o São Paulo jogará, como mandante, na Arena Barueri diante do Mogi Mirim. Isso porque no estádio do Morumbi haverá, nesta ...",
       metaKeywords = "Leao,Arena,Barueri,casa,Tricolor",
       lang = Some("pt"),
@@ -149,6 +157,7 @@ class GanderIT extends Specification {
       url = url,
       content     = "Emerson Leão não foi ao campo na manhã desta terça-feira no centro de treinamento do São Paulo",
       title       = "'Filho do gramado', Leão administra o São Paulo na base da conversa | globoesporte.com",
+      processedTitle = "'Filho do gramado', Leão administra o São Paulo na base da conversa",
       metaDescription = "Emerson Le&atilde;o cobra lideran&ccedil;a ao S&atilde;o Paulo (Foto: M&aacute;rio &Acirc;ngelo / Ag. Estado) Emerson Le&atilde;o n&atilde;o foi ao campo na manh&atilde; desta ter&ccedil;a-feira no centro de treinamento do S&atilde;o Paulo. Bem humorado e com roupa casual, preferiu acompanhar de longe ...",
       metaKeywords = "notícias, notícia, são paulo",
       lang = None,
@@ -178,6 +187,7 @@ class GanderIT extends Specification {
       url = url,
       content     = "On November 7, 1982, the Camp Nou enjoyed a historic moment.",
       title       = "30 years since visit of Pope John Paul II | FC Barcelona",
+      processedTitle = "30 years since visit of Pope John Paul II | FC Barcelona",
       metaDescription = "This Wednesday is the 30th anniversary of mass given by Pope John Paul at the Camp Nou",
       metaKeywords = "Josep Lluís Núñez, Camp Nou, Club, Season 2012-2013",
       lang = Some("en"),
@@ -193,6 +203,7 @@ class GanderIT extends Specification {
       url = url,
       content     = "by PAUL BRACCHI Last updated at 01:01 09 October 2007 An Oxford First, a brilliant radio career and newly qualified as a barrister, Bruce Hyman seemed to have all life's gifts",
       title       = "A spectacular destruction: How one email led to the downfall of a barrister who had it all | Daily Mail Online",
+      processedTitle = "A spectacular destruction: How one email led to the downfall of a barrister who had it all",
       metaDescription = "An Oxford First, a brilliant radio career and newly qualified as a barrister, Bruce Hyman seemed to have all life's gifts  -  until a moment of utter madness put him behind bars and left his life in ruins",
       metaKeywords = "A,spectacular,destruction,How,email,led,downfall,barrister,all",
       lang = Some("en"),
