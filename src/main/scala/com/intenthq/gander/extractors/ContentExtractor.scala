@@ -1,5 +1,7 @@
 package com.intenthq.gander.extractors
 
+import java.net.URL
+import java.text.Normalizer
 import java.util.Date
 import java.util.regex.Pattern
 
@@ -21,6 +23,23 @@ object ContentExtractor {
 
   def extractTitle(doc: Document): String =
     byTag("title")(doc).headOption.map(_.text).getOrElse("").replace("&#65533;", "").trim
+
+  def processTitle(rawTitle: String, canonical: Option[String]): String = {
+    def normalize(str: String) =
+      Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+
+    canonical.flatMap(c => Try(new URL(c)).toOption).flatMap { url =>
+      val names = url.getAuthority.split('.').init.filter(_.length > 2).filter(_ != "www")
+      List(""" | """, " - ").collectFirst {
+        case separator if rawTitle.contains(separator) =>
+          val parts = rawTitle.split(Pattern.quote(separator))
+          val partsNot = parts.filterNot { part =>
+            names.exists(name => normalize(part).toLowerCase.replace(" ", "").contains(name))
+          }
+          partsNot.mkString(separator).trim
+      }
+    }.getOrElse(rawTitle)
+  }
 
   def extractLang(doc: Document): Option[String] =
     byTag("html")(doc).headOption.map(_.attr("lang")).filter(_.nonEmpty).orElse(

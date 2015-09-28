@@ -15,6 +15,7 @@ import scala.util.Try
 case class Link(text: String, target: String)
 
 case class PageInfo(title: String,
+                    processedTitle: String,
                     metaDescription: String,
                     metaKeywords: String,
                     lang: Option[String],
@@ -31,7 +32,9 @@ object Gander {
       val canonicalLink = extractCanonicalLink(doc)
       val publishDate = extractDate(doc).map(_.toDate).orElse(canonicalLink.flatMap(extractDateFromURL))
 
-      val info = PageInfo(title = extractTitle(doc),
+      val rawTitle = extractTitle(doc)
+      val info = PageInfo(title = rawTitle,
+                          processedTitle = processTitle(rawTitle, canonicalLink),
                           metaDescription = extractMetaDescription(doc),
                           metaKeywords = extractMetaKeywords(doc),
                           lang = extractLang(doc),
