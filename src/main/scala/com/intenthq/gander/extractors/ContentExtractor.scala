@@ -30,7 +30,7 @@ object ContentExtractor {
 
     canonical.flatMap(c => Try(new URL(c)).toOption).flatMap { url =>
       val names = url.getAuthority.split('.').init.filter(_.length > 2).filter(_ != "www")
-      List(""" | """, " - ").collectFirst {
+      List(""" | """, " • ", " › ", " :: ", " » ", " - ", " : ", " — ", " · ").collectFirst {
         case separator if rawTitle.contains(separator) =>
           val parts = rawTitle.split(Pattern.quote(separator))
           val partsNot = parts.filterNot { part =>
