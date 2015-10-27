@@ -16,6 +16,8 @@ import scala.collection.convert.Wrappers.JListWrapper
 import scala.collection.mutable
 import scala.math._
 import scala.util.Try
+import org.joda.time.format.ISODateTimeFormat.dateTimeParser
+
 
 object ContentExtractor {
 
@@ -47,6 +49,34 @@ object ContentExtractor {
         metaContent("property=og:locale")(doc)
       )
     )
+
+  def extractDate(doc: Document): Option[DateTime] = {
+
+    metaContent("property=article:published_time")(doc).orElse(
+
+      metaContent("name=DCTERMS.created")(doc).orElse(
+
+        select("time[class=dt-published published entry-date]")(doc)
+            .headOption.map(_.attr("datetime").trim).orElse(
+
+          select("time[itemprop=datePublished]")(doc)
+              .headOption.map(_.attr("datetime").trim).orElse(
+
+            metaContent("name=DisplayDate")(doc).orElse(
+
+              metaContent("name=date")(doc)
+            )
+          )
+        )
+      )
+    ).flatMap{ x =>
+      /**
+      * replaceAll("/","-") is needed as ISODateTimeFormat will block on /
+      * e.g. http://www.bbc.co.uk/sport/0/football/34203622
+      */
+      Try(dateTimeParser.parseDateTime(x.replaceAll("/","-"))).toOption
+    }
+  }
 
   private def metaContent(metaName: String)(implicit doc: Document): Option[String] =
     select(s"meta[$metaName]").headOption.map(_.attr("content").trim)
@@ -280,7 +310,7 @@ object ContentExtractor {
       .foreach(remove)
     node
   }
-  
+
   private def isNodeScoreThresholdMet(node: Element, e: Element): Boolean = {
     val topNodeScore = getScore(node)
     val currentNodeScore = getScore(e)

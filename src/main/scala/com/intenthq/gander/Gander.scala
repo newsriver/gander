@@ -51,14 +51,4 @@ object Gander {
                   links = extractLinks(node))
       }.getOrElse(info)
     }
-
-
-  def extractDate(rootElement: Element): Option[DateTime] = {
-    // Try to retrieve publish time from open graph data
-    import org.joda.time.format.ISODateTimeFormat._
-    JListWrapper(rootElement.select("meta[property=article:published_time]")).headOption.flatMap(x =>
-      Try(dateTimeParser.parseDateTime(x.attr("content"))).toOption
-    )
-  }
-
 }
