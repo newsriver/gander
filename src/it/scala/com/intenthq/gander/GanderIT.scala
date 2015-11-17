@@ -70,7 +70,7 @@ class GanderIT extends Specification {
       metaDescription = "Manchester City concede two goals in the last 20 minutes as Juventus fight back from a goal down to win at Etihad Stadium.",
       metaKeywords = "BBC, Sport, BBC Sport, bbc.co.uk, world, uk, international, foreign, british, online, service",
       lang = Some("en-GB"),
-      date = None,
+      date = Some("2015-09-12T18:06:48+00:00"),
       links = List(Link("- they reached last season's final -", "http://www.bbc.co.uk/sport/0/football/33010277"),
                    Link("£49m move to Manchester City from Liverpool -", "http://www.bbc.co.uk/sport/0/football/33497488"))
     )
@@ -86,7 +86,7 @@ class GanderIT extends Specification {
       metaDescription = "Here it is.",
       metaKeywords = "",
       lang = Some("en"),
-      date = None,
+      date = Some("2011-09-21"),
       links = List(Link("announcement", "http://www.businessinsider.com/federal-reserve-announcement-fomc-operation-twist-2011-9")))
   }
 
@@ -161,7 +161,7 @@ class GanderIT extends Specification {
       metaDescription = "Emerson Le&atilde;o cobra lideran&ccedil;a ao S&atilde;o Paulo (Foto: M&aacute;rio &Acirc;ngelo / Ag. Estado) Emerson Le&atilde;o n&atilde;o foi ao campo na manh&atilde; desta ter&ccedil;a-feira no centro de treinamento do S&atilde;o Paulo. Bem humorado e com roupa casual, preferiu acompanhar de longe ...",
       metaKeywords = "notícias, notícia, são paulo",
       lang = None,
-      date = Some("2012-04-01"),
+      date = Some("2012-04-03T13:49"),
       links = List())
   }
 
@@ -196,7 +196,7 @@ class GanderIT extends Specification {
     )
   }
 
-  "Daily Mail (malformed date caused crash)" >> {
+  "Daily Mail (date is malformed + publish_date misused)" >> {
     val url = "http://www.dailymail.co.uk/news/article-486484/A-spectacular-destruction-How-email-led-downfall-barrister-all.html"
 
     check(extract(url),
