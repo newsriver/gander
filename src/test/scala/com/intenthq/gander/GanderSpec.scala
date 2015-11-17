@@ -1,18 +1,21 @@
 package com.intenthq.gander
 
+import java.io.InputStreamReader
 import java.net.URL
 import java.nio.charset.Charset
+import java.util.zip.GZIPInputStream
 
 import com.google.common.base.Charsets
-import com.google.common.io.Resources
+import com.google.common.io.CharStreams
 import com.intenthq.gander.opengraph.OpenGraphData
 import org.joda.time.DateTime
 import org.specs2.mutable.Specification
 
-class GanderIT extends Specification {
+class GanderSpec extends Specification {
 
   def extract(url: String, charset: Charset = Charsets.UTF_8): PageInfo = {
-    val rawHTML = Resources.toString(new URL(url), charset)
+    val resource = getClass.getResourceAsStream("/" + url.stripPrefix("http://").replace('/', '_') + ".gz")
+    val rawHTML = CharStreams.toString(new InputStreamReader(new GZIPInputStream(resource), charset))
     Gander.extract(rawHTML).get
   }
 
@@ -27,6 +30,13 @@ class GanderIT extends Specification {
     pageInfo.cleanedText.get must startWith(content)
     pageInfo.canonicalLink.map( _ must_== url).getOrElse(1 must_== 1)
     pageInfo.links must_== links
+  }
+
+  "UTF-8 encoding of unicode non breaking char must be sanitised as a space" >> {
+    //Some pages (like the Apple Watch one) contain this char instead of a space
+    //For more info check https://en.wikipedia.org/wiki/Non-breaking_space
+    val url = "http://www.apple.com/watch/"
+    extract(url).cleanedText.get must contain("Apple Watch")
   }
 
   "intenthq" >> {
@@ -125,34 +135,22 @@ class GanderIT extends Specification {
   }
 
   "lemonde" >> {
-    val url = "http://www.lemonde.fr/football/article/2015/07/23/pep-guardiola-un-as-dans-la-manche-des-independantistes_4695701_1616938.html"
+//    val url = "http://www.lemonde.fr/football/article/2015/07/23/pep-guardiola-un-as-dans-la-manche-des-independantistes_4695701_1616938.html"
 //    check(extract(url),
 //      url = url,
 //      content = "Dans la planète Barça, Pep Guardiola est un demi-dieu. Entraîneur du FC Barcelone entre 2008 et 2012, il a fait remporter aux Blaugrana 14 titres officiels. Dont six en une seule année : 2009",
 //      title = "En Catalogne, Pep Guardiola, figure du Barça, se présente sur la liste indépendantiste",
+//      processedTitle = "En Catalogne, Pep Guardiola, figure du Barça, se présente sur la liste indépendantiste",
 //      metaDescription = "L’ancien entraîneur du FC Barcelone devrait clore la liste unitaire visant à exiger l’indépendance de la Catalogne lors des élections du 27 septembre.",
 //      metaKeywords = "",
 //      lang = Some("fr"),
-//      date = Some("2015-07-23"))
+//      date = Some("2015-07-23T15:57:46"),
+//      links = List.empty)
     pending
   }
 
-  "lancenet" >> {
-    val url = "http://www.lancenet.com.br/sao-paulo/Leao-Arena-Barueri-casa-Tricolor_0_675532605.html"
-    check(extract(url),
-      url = url,
-      content = "No próximo sábado, o São Paulo jogará, como mandante, na Arena Barueri diante do Mogi Mirim",
-      title = "Para Leão, Arena Barueri não é casa do Tricolor - São Paulo | Lancenet.com.br",
-      processedTitle = "Para Leão, Arena Barueri não é casa do Tricolor - São Paulo",
-      metaDescription = "No próximo sábado, o São Paulo jogará, como mandante, na Arena Barueri diante do Mogi Mirim. Isso porque no estádio do Morumbi haverá, nesta ...",
-      metaKeywords = "Leao,Arena,Barueri,casa,Tricolor",
-      lang = Some("pt"),
-      date = Some("2012-04-03T18:30:00Z"),
-      links = List())
-  }
-
   "globoesporte" >> {
-    val url = "http://globoesporte.globo.com/futebol/times/sao-paulo/noticia/2012/04/filho-do-gramado-leao-administra-o-sao-paulo-na-base-da-conversa.html"
+      val url = "http://globoesporte.globo.com/futebol/times/sao-paulo/noticia/2012/04/filho-do-gramado-leao-administra-o-sao-paulo-na-base-da-conversa.html"
     check(extract(url),
       url = url,
       content     = "Emerson Leão não foi ao campo na manhã desta terça-feira no centro de treinamento do São Paulo",

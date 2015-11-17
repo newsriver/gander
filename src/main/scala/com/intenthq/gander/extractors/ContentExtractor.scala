@@ -51,31 +51,23 @@ object ContentExtractor {
     )
 
   def extractDate(doc: Document): Option[DateTime] = {
-
     metaContent("property=article:published_time")(doc).orElse(
-
       metaContent("name=DCTERMS.created")(doc).orElse(
-
-        select("time[class=dt-published published entry-date]")(doc)
-            .headOption.map(_.attr("datetime").trim).orElse(
-
-          select("time[itemprop=datePublished]")(doc)
-              .headOption.map(_.attr("datetime").trim).orElse(
-
+        select("time[class=dt-published published entry-date]")(doc).headOption.map(_.attr("datetime").trim).orElse(
+          select("time[itemprop=datePublished]")(doc).headOption.map(_.attr("datetime").trim).orElse(
             metaContent("name=DisplayDate")(doc).orElse(
-
               metaContent("name=date")(doc)
             )
           )
         )
       )
-    ).flatMap{ x =>
+    ).flatMap(x =>
       /**
       * replaceAll("/","-") is needed as ISODateTimeFormat will block on /
       * e.g. http://www.bbc.co.uk/sport/0/football/34203622
       */
       Try(dateTimeParser.parseDateTime(x.replaceAll("/","-"))).toOption
-    }
+    )
   }
 
   private def metaContent(metaName: String)(implicit doc: Document): Option[String] =
