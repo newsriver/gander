@@ -62,10 +62,8 @@ object ContentExtractor {
         )
       )
     ).flatMap(x =>
-      /**
-      * replaceAll("/","-") is needed as ISODateTimeFormat will block on /
-      * e.g. http://www.bbc.co.uk/sport/0/football/34203622
-      */
+      // replaceAll("/","-") is needed as ISODateTimeFormat will block on /
+      // e.g. http://www.bbc.co.uk/sport/0/football/34203622
       Try(dateTimeParser.parseDateTime(x.replaceAll("/","-"))).toOption
     )
   }
