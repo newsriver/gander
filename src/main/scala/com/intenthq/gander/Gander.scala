@@ -4,11 +4,8 @@ import java.util.Date
 
 import com.intenthq.gander.extractors.ContentExtractor._
 import com.intenthq.gander.opengraph.OpenGraphData
-import org.joda.time.DateTime
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
 
-import scala.collection.convert.Wrappers.JListWrapper
 import scala.util.Try
 
 
@@ -27,8 +24,10 @@ case class PageInfo(title: String,
 
 object Gander {
 
-  def extract(html: String, lang: String = "all"): Option[PageInfo] =
-    Try(Jsoup.parse(html)).toOption.map { doc =>
+  def extract(html: String, lang: String = "all"): Option[PageInfo] = {
+    //This is replacing the non-breaking space with a regular space
+    val sanitised = html.replace(' ', ' ')
+    Try(Jsoup.parse(sanitised)).toOption.map { doc =>
       val canonicalLink = extractCanonicalLink(doc)
       val publishDate = extractDate(doc).map(_.toDate).orElse(canonicalLink.flatMap(extractDateFromURL))
 
@@ -51,4 +50,6 @@ object Gander {
                   links = extractLinks(node))
       }.getOrElse(info)
     }
+  }
+
 }
