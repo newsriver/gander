@@ -28,7 +28,7 @@ class GanderSpec extends Specification {
     pageInfo.lang must_== lang
     pageInfo.publishDate must_== date.map(DateTime.parse(_).toDate)
     pageInfo.cleanedText.get must startWith(content)
-    pageInfo.canonicalLink.map( _ must_== url).getOrElse(1 must_== 1)
+    pageInfo.canonicalLink.map(_ must_== url).getOrElse(1 must_== 1)
     pageInfo.links must_== links
   }
 
@@ -51,7 +51,7 @@ class GanderSpec extends Specification {
       lang = Some("en-GB"),
       date = Some("2015-03-01"),
       links = List(Link("Uncle Bob", "http://en.wikipedia.org/wiki/Robert_Cecil_Martin"),
-                   Link("DRY", "http://en.wikipedia.org/wiki/Don%27t_repeat_yourself")))
+        Link("DRY", "http://en.wikipedia.org/wiki/Don%27t_repeat_yourself")))
   }
 
   "bbc.com" >> {
@@ -66,23 +66,22 @@ class GanderSpec extends Specification {
       lang = Some("en"),
       date = None,
       links = List(Link("Financial Times said", "http://www.ft.com/cms/s/0/27e42c8e-351d-11e5-b05b-b01debd57852.html#axzz3hDFfsPCX"),
-                   Link("said in a report", "http://www.ft.com/cms/s/0/27e42c8e-351d-11e5-b05b-b01debd57852.html#axzz3hDFfsPCX")))
+        Link("said in a report", "http://www.ft.com/cms/s/0/27e42c8e-351d-11e5-b05b-b01debd57852.html#axzz3hDFfsPCX")))
 
   }
 
-  "bbc.co.uk" >> {
-    val url = "http://www.bbc.co.uk/sport/0/football/34203622"
+  "bbc.com/sport" >> {
+    val url = "http://www.bbc.com/sport/football/34203622"
     check(extract(url),
       url = url,
       content = "Manchester City's Champions League campaign got off to a disappointing start with a home defeat by last season's runners-up Juventus. City, who have struggled to make a serious impact in the Champions League and have never won their opening home game in the group stage, looked to be on course for victory when Juventus defender Giorgio Chiellini headed into his own net under pressure from Vincent Kompany.",
-      title = "BBC Sport - Alvaro Morata & Mario Mandzukic score as Juventus shock Man City",
+      title = "Alvaro Morata & Mario Mandzukic score as Juventus shock Man City - BBC Sport",
       processedTitle = "Alvaro Morata & Mario Mandzukic score as Juventus shock Man City",
       metaDescription = "Manchester City concede two goals in the last 20 minutes as Juventus fight back from a goal down to win at Etihad Stadium.",
-      metaKeywords = "BBC, Sport, BBC Sport, bbc.co.uk, world, uk, international, foreign, british, online, service",
-      lang = Some("en-GB"),
-      date = Some("2015-09-12T18:06:48+00:00"),
-      links = List(Link("- they reached last season's final -", "http://www.bbc.co.uk/sport/0/football/33010277"),
-                   Link("£49m move to Manchester City from Liverpool -", "http://www.bbc.co.uk/sport/0/football/33497488"))
+      metaKeywords = "",
+      lang = Some("en"),
+      date = None,
+      links = List()
     )
   }
 
@@ -105,18 +104,18 @@ class GanderSpec extends Specification {
     check(extract(url),
       url = url,
       content = "Los aliados de la OTAN ofrecieron este martes respaldo político a Turquía en su ofensiva contra el Estado Islámico tras una reunión convocada de urgencia por el Gobierno de Ankara.",
-      title = "La OTAN apoya con cautela la ofensiva turca contra el yihadismo | Internacional | EL PAÍS"                                                                                                                        ,
+      title = "La OTAN apoya con cautela la ofensiva turca contra el yihadismo | Internacional | EL PAÍS",
       processedTitle = "La OTAN apoya con cautela la ofensiva turca contra el yihadismo",
       metaDescription = "La Alianza se ha reunido este martes con carácter de urgencia a pedición de Ankara para tratar el avance del Estado Islámico",
       metaKeywords = "otan, apoyar, cautela, ofensiva, turca, turco, yihadismo, alianza, haber, reunir, martes, urgencia, pedición, ankara, secretario, general, jens stoltenberg, resaltar, unidad, aliado",
       lang = Some("es"),
       date = Some("2015-07-29"),
       links = List(Link("en su ofensiva contra el Estado Islámico", "http://internacional.elpais.com/internacional/2015/07/24/actualidad/1437717227_199769.html"),
-                   Link("Jens Stoltenberg.", "http://elpais.com/tag/jens_stoltenberg/a/"),
-                   Link("que este martes hizo estallar un tramo de un gasoducto procedente de Irán", "http://internacional.elpais.com/internacional/2015/07/28/actualidad/1438079899_805996.html"),
-                   Link("onflicto entre Ankara y los simpatizantes del PKK", "http://internacional.elpais.com/internacional/2015/07/27/actualidad/1437986632_361510.html"),
-                   Link("crear una zona libre de combatientes del EI", "http://internacional.elpais.com/internacional/2015/07/27/actualidad/1438026945_461718.html"),
-                   Link("Ahmet Davutoglu", "http://elpais.com/tag/ahmet_davutoglu/a/")))
+        Link("Jens Stoltenberg.", "http://elpais.com/tag/jens_stoltenberg/a/"),
+        Link("que este martes hizo estallar un tramo de un gasoducto procedente de Irán", "http://internacional.elpais.com/internacional/2015/07/28/actualidad/1438079899_805996.html"),
+        Link("onflicto entre Ankara y los simpatizantes del PKK", "http://internacional.elpais.com/internacional/2015/07/27/actualidad/1437986632_361510.html"),
+        Link("crear una zona libre de combatientes del EI", "http://internacional.elpais.com/internacional/2015/07/27/actualidad/1438026945_461718.html"),
+        Link("Ahmet Davutoglu", "http://elpais.com/tag/ahmet_davutoglu/a/")))
   }
 
   "corriere" >> {
@@ -134,27 +133,46 @@ class GanderSpec extends Specification {
 
   }
 
+  /*"canarias7" >> {
+    val url = "http://www.canarias7.es/articulo.cfm?Id=434625"
+    check(extract(url, Charsets.UTF_8),
+      url = url,
+      content = "La Junta de Portavoces del Congreso, con el apoyo de la mayoría de los grupos salvo el PP, ha acordado que el ministro de Economía, Luis de Guindos, comparezca para explicar el nombramiento y renuncia de José Manuel Soria como director ejecutivo del Banco Mundial en un pleno extraordinario, para el que aún no hay fecha.\n\nLa fecha de la comparecencia de De Guindos deberá fijarla ahora la Mesa del Congreso, que está semana aprobó el calendario de plenos ordinarios de los próximos meses sin contemplar ninguna sesión plenaria extraordinaria.\n\nNo obstante, PSOE y Unidos Podemos han logrado sacar adelante en la Junta de Portavoces su petición para que De Guindos comparezca en un pleno urgente y no en la Comisión de Economía, como había solicitado el ministro. Solicitud que ha contado con el apoyo de Ciudadanos y otros partidos como el PNV, ERC y Partido Demócrata Catalán, que representa al grupo Mixto, según fuentes parlamentarias.",
+      title = "Canarias7. Nacional. El Congreso acuerda que De Guindos explique en un pleno el caso Soria",
+      processedTitle = "El Congreso acuerda que De Guindos explique en un pleno el caso Soria",
+      metaDescription = "La Junta de Portavoces del Congreso, con el apoyo de la mayoría de los grupos salvo el PP, ha acordado que el ministro de Economía, Luis de Guindos, comparezca para explicar el nombramiento y renuncia de José Manuel Soria como director ejecutivo del Banco Mundial en un pleno extraordinario, para el ...",
+      metaKeywords = "Canarias7, prensa, noticias, información, informacion general, Islas Canarias, Canarias, Canary Islands,",
+      lang = Some("es"),
+      date = None,
+      links = List())
+
+  }*/
+
+
+
+
+
   "lemonde" >> {
-//    val url = "http://www.lemonde.fr/football/article/2015/07/23/pep-guardiola-un-as-dans-la-manche-des-independantistes_4695701_1616938.html"
-//    check(extract(url),
-//      url = url,
-//      content = "Dans la planète Barça, Pep Guardiola est un demi-dieu. Entraîneur du FC Barcelone entre 2008 et 2012, il a fait remporter aux Blaugrana 14 titres officiels. Dont six en une seule année : 2009",
-//      title = "En Catalogne, Pep Guardiola, figure du Barça, se présente sur la liste indépendantiste",
-//      processedTitle = "En Catalogne, Pep Guardiola, figure du Barça, se présente sur la liste indépendantiste",
-//      metaDescription = "L’ancien entraîneur du FC Barcelone devrait clore la liste unitaire visant à exiger l’indépendance de la Catalogne lors des élections du 27 septembre.",
-//      metaKeywords = "",
-//      lang = Some("fr"),
-//      date = Some("2015-07-23T15:57:46"),
-//      links = List.empty)
+    //    val url = "http://www.lemonde.fr/football/article/2015/07/23/pep-guardiola-un-as-dans-la-manche-des-independantistes_4695701_1616938.html"
+    //    check(extract(url),
+    //      url = url,
+    //      content = "Dans la planète Barça, Pep Guardiola est un demi-dieu. Entraîneur du FC Barcelone entre 2008 et 2012, il a fait remporter aux Blaugrana 14 titres officiels. Dont six en une seule année : 2009",
+    //      title = "En Catalogne, Pep Guardiola, figure du Barça, se présente sur la liste indépendantiste",
+    //      processedTitle = "En Catalogne, Pep Guardiola, figure du Barça, se présente sur la liste indépendantiste",
+    //      metaDescription = "L’ancien entraîneur du FC Barcelone devrait clore la liste unitaire visant à exiger l’indépendance de la Catalogne lors des élections du 27 septembre.",
+    //      metaKeywords = "",
+    //      lang = Some("fr"),
+    //      date = Some("2015-07-23T15:57:46"),
+    //      links = List.empty)
     pending
   }
 
   "globoesporte" >> {
-      val url = "http://globoesporte.globo.com/futebol/times/sao-paulo/noticia/2012/04/filho-do-gramado-leao-administra-o-sao-paulo-na-base-da-conversa.html"
+    val url = "http://globoesporte.globo.com/futebol/times/sao-paulo/noticia/2012/04/filho-do-gramado-leao-administra-o-sao-paulo-na-base-da-conversa.html"
     check(extract(url),
       url = url,
-      content     = "Emerson Leão não foi ao campo na manhã desta terça-feira no centro de treinamento do São Paulo",
-      title       = "'Filho do gramado', Leão administra o São Paulo na base da conversa | globoesporte.com",
+      content = "Emerson Leão não foi ao campo na manhã desta terça-feira no centro de treinamento do São Paulo",
+      title = "'Filho do gramado', Leão administra o São Paulo na base da conversa | globoesporte.com",
       processedTitle = "'Filho do gramado', Leão administra o São Paulo na base da conversa",
       metaDescription = "Emerson Le&atilde;o cobra lideran&ccedil;a ao S&atilde;o Paulo (Foto: M&aacute;rio &Acirc;ngelo / Ag. Estado) Emerson Le&atilde;o n&atilde;o foi ao campo na manh&atilde; desta ter&ccedil;a-feira no centro de treinamento do S&atilde;o Paulo. Bem humorado e com roupa casual, preferiu acompanhar de longe ...",
       metaKeywords = "notícias, notícia, são paulo",
@@ -168,13 +186,13 @@ class GanderSpec extends Specification {
 
     extract(url).openGraphData must_==
       OpenGraphData(title = Some("La OTAN apoya con cautela la ofensiva turca contra el yihadismo"),
-                    siteName = Some("EL PAÍS"),
-                    url = Some(new URL(url)),
-                    description = Some("La Alianza se ha reunido este martes con carácter de urgencia a pedición de Ankara para tratar el avance del Estado Islámico"),
-                    image = Some(new URL("http://ep00.epimg.net/internacional/imagenes/2015/07/28/actualidad/1438076596_960360_1438078067_noticia_normal.jpg")),
-                    `type` = Some("article"),
-                    locale = None,
-                    publishedTime = Some(new DateTime(2015, 7, 29, 0, 0)))
+        siteName = Some("EL PAÍS"),
+        url = Some(new URL(url)),
+        description = Some("La Alianza se ha reunido este martes con carácter de urgencia a pedición de Ankara para tratar el avance del Estado Islámico"),
+        image = Some(new URL("http://ep00.epimg.net/internacional/imagenes/2015/07/28/actualidad/1438076596_960360_1438078067_noticia_normal.jpg")),
+        `type` = Some("article"),
+        locale = None,
+        publishedTime = Some(new DateTime(2015, 7, 29, 0, 0)))
 
   }
 
@@ -183,14 +201,14 @@ class GanderSpec extends Specification {
 
     check(extract(url),
       url = url,
-      content     = "On November 7, 1982, the Camp Nou enjoyed a historic moment.",
-      title       = "30 years since visit of Pope John Paul II | FC Barcelona",
-      processedTitle = "30 years since visit of Pope John Paul II | FC Barcelona",
+      content = "On November 7, 1982, the Camp Nou enjoyed a historic moment.",
+      title = "30 years since visit of Pope John Paul II | FC Barcelona",
+      processedTitle = "30 years since visit of Pope John Paul II",
       metaDescription = "This Wednesday is the 30th anniversary of mass given by Pope John Paul at the Camp Nou",
       metaKeywords = "Josep Lluís Núñez, Camp Nou, Club, Season 2012-2013",
       lang = Some("en"),
       date = None,
-      links =  List()
+      links = List()
     )
   }
 
@@ -199,14 +217,14 @@ class GanderSpec extends Specification {
 
     check(extract(url),
       url = url,
-      content     = "by PAUL BRACCHI Last updated at 01:01 09 October 2007 An Oxford First, a brilliant radio career and newly qualified as a barrister, Bruce Hyman seemed to have all life's gifts",
-      title       = "A spectacular destruction: How one email led to the downfall of a barrister who had it all | Daily Mail Online",
+      content = "by PAUL BRACCHI Last updated at 01:01 09 October 2007 An Oxford First, a brilliant radio career and newly qualified as a barrister, Bruce Hyman seemed to have all life's gifts",
+      title = "A spectacular destruction: How one email led to the downfall of a barrister who had it all | Daily Mail Online",
       processedTitle = "A spectacular destruction: How one email led to the downfall of a barrister who had it all",
       metaDescription = "An Oxford First, a brilliant radio career and newly qualified as a barrister, Bruce Hyman seemed to have all life's gifts  -  until a moment of utter madness put him behind bars and left his life in ruins",
       metaKeywords = "A,spectacular,destruction,How,email,led,downfall,barrister,all",
       lang = Some("en"),
       date = None,
-      links =  List()
+      links = List()
     )
   }
 
