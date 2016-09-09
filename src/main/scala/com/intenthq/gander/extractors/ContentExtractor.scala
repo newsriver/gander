@@ -34,9 +34,9 @@ object ContentExtractor {
     byTag("title")(doc).headOption.map(_.text).getOrElse("").replace("&#65533;", "").trim
 
 
+  //TODO: also consider to test title permutations take from the url path
+  //in order to achive this we need to further simplify the title and remove all symbold, this simbol less version is than used as key of the hash map
   def processTitle(rawTitle: String, canonical: Option[String], openGraphData: OpenGraphData, twitterData: TwitterData, doc:Document): String = {
-    def normalize(str: String) =
-      Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
 
       val grades = collection.mutable.Map[String,Int]()
       titlePermutations(rawTitle).foreach(k =>{
@@ -44,27 +44,33 @@ object ContentExtractor {
       })
 
 
-      val hTags = doc.select("h1, h2, h3, h4, h5, h6").iterator()
-      while(hTags.hasNext()){
-        val element = hTags.next()
-          titlePermutations(element.text()).foreach(k =>{
-            addOrUpdate[String,Int](grades, k, null, (v: Int) => v + 1)
-          })
-      }
+    val hTags = doc.select("h1, h2, h3, h4, h5, h6").iterator()
+    while(hTags.hasNext()){
+      val element = hTags.next()
+      titlePermutations(element.text()).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
+        !addOrUpdate[String, Int](grades, _, null, (v: Int) => v + 4)
+      ).force
+    }
+
+
+
+
 
     if(openGraphData.title.isDefined) {
-      titlePermutations(openGraphData.title.get).foreach(k =>{
-          addOrUpdate[String, Int](grades, k, null, (v: Int) => v + 1)
-      })
+      titlePermutations(openGraphData.title.get).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
+        !addOrUpdate[String, Int](grades, _, null, (v: Int) => v + 1)
+      ).force
     }
+
+    //Due to twitter chars limit we only cosider it if it is not too shorter than 75% the title lenght
     if(twitterData.title.isDefined) {
-      titlePermutations(twitterData.title.get).foreach(k =>{
-        addOrUpdate[String,Int](grades, k, null, (v: Int) => v + 1)
-      })
+      titlePermutations(twitterData.title.get).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
+        !addOrUpdate[String, Int](grades, _, null, (v: Int) => v + 1)
+      ).force
     }
 
       val title = ListMap(grades.toSeq.sortWith((leftE,rightE) => {
-        if(leftE._2 == rightE._2){
+        if(leftE._2 == rightE._2 ){
            leftE._1.length() > rightE._1.length
         }else{
            leftE._2 > rightE._2
@@ -92,11 +98,10 @@ object ContentExtractor {
     return permutations;
   }
 
-  def addOrUpdate[K, V](m: collection.mutable.Map[K, V], k: K, kv: (K, V),
-                        f: V => V) {
-    m.get(k) match {
-      case Some(e) => m.update(k, f(e))
-      case None    => {if(kv!=null){m += kv}}
+  def addOrUpdate[K, V](m: collection.mutable.Map[K, V], k: K, kv: (K, V),f: V => V) : Boolean = {
+   return m.get(k) match {
+      case Some(e) => {m.update(k, f(e)); return true}
+      case None    => { if(kv!=null){m += kv}; return false}
     }
   }
 
@@ -142,7 +147,7 @@ object ContentExtractor {
   /**
     * if the article has meta keywords set in the source, use that
     */
-  def extractMetaKeywords(implicit doc: Document): String = metaContent("name=keywords").getOrElse("")
+  def extractMetaKeywords(implicit doc: Document): String = metaContent("name=keywords").getOrElse(metaContent("name=news_keywords").getOrElse(""))
 
   /**
     * if the article has meta canonical link set in the url
