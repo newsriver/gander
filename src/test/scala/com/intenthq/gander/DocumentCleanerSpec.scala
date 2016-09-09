@@ -1,8 +1,11 @@
 package com.intenthq.gander
 
 import org.jsoup.Jsoup
+import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class DocumentCleanerSpec extends Specification {
 
   def html(body: String) = s"<html><head></head><body>$body</body></html>"

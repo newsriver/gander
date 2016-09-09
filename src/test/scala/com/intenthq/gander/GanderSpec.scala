@@ -9,8 +9,11 @@ import com.google.common.base.Charsets
 import com.google.common.io.CharStreams
 import com.intenthq.gander.opengraph.OpenGraphData
 import org.joda.time.DateTime
+import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class GanderSpec extends Specification {
 
   def extract(url: String, charset: Charset = Charsets.UTF_8): PageInfo = {

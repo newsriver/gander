@@ -2,8 +2,11 @@ package com.intenthq.gander
 
 import com.intenthq.gander.extractors.ContentExtractor._
 import org.jsoup.Jsoup
+import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class ContentExtractorSpec extends Specification {
   "extractTitle" >> {
     def docFromTitle(title: String) = Jsoup.parse(s"<html><head><title>$title</title></head><body></body></html>")
