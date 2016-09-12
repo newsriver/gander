@@ -39,32 +39,37 @@ object ContentExtractor {
   def processTitle(rawTitle: String, canonical: Option[String], openGraphData: OpenGraphData, twitterData: TwitterData, doc:Document): String = {
 
       val grades = collection.mutable.Map[String,Int]()
-      titlePermutations(rawTitle).foreach(k =>{
-           addOrUpdate[String,Int](grades, k, k -> 1, (v: Int) => v + 1)
+
+      //create map with words only title to words with symbols§
+      val originalTitle = Map[String,String](titlePermutations(rawTitle,false).toSeq map { a => a.replaceAll("[^\\p{L}]", "_").toUpperCase -> a }: _*)
+      originalTitle.keys.foreach(k =>{
+        addOrUpdate[String,Int](grades, k, k -> 1, (v: Int) => v + 1)
       })
 
 
     val hTags = doc.select("h1, h2, h3, h4, h5, h6").iterator()
     while(hTags.hasNext()){
       val element = hTags.next()
-      titlePermutations(element.text()).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
+      titlePermutations(element.text(),true).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
         !addOrUpdate[String, Int](grades, _, null, (v: Int) => v + 4)
       ).force
     }
 
+    titlePermutations(openGraphData.title.get,true).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
+      !addOrUpdate[String, Int](grades, _, null, (v: Int) => v + 1)
+    ).force
 
 
 
-
-    if(openGraphData.title.isDefined) {
-      titlePermutations(openGraphData.title.get).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
-        !addOrUpdate[String, Int](grades, _, null, (v: Int) => v + 1)
+    if(canonical != None) {
+      titlePermutations(canonical.get,true).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
+        !addOrUpdate[String, Int](grades, _, null, (v: Int) => v + 2)
       ).force
     }
 
     //Due to twitter chars limit we only cosider it if it is not too shorter than 75% the title lenght
     if(twitterData.title.isDefined) {
-      titlePermutations(twitterData.title.get).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
+      titlePermutations(twitterData.title.get,true).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
         !addOrUpdate[String, Int](grades, _, null, (v: Int) => v + 1)
       ).force
     }
@@ -78,11 +83,11 @@ object ContentExtractor {
       }):_*).iterator.next()._1;
 
 
-    return title;
+    return originalTitle.get(title).get;
 
   }
 
-  def titlePermutations(title:String): Set[String] ={
+  def titlePermutations(title:String,stripSymbols:Boolean): Set[String] ={
     var permutations = Set[String]()
     val keywords = title.split("[\\s]+");
     for (i <- 0 until keywords.length) {
@@ -90,7 +95,12 @@ object ContentExtractor {
       for (j <- i until keywords.length) {
         sequence = sequence.concat(keywords(j));
         if(!sequence.isEmpty && sequence.length > title.length*MIN_TITLE_PERMUTATION_LENGTH){
-          permutations+=sequence;
+          if(stripSymbols){
+            permutations+=sequence.replaceAll("[^\\p{L}]", "_").toUpperCase;
+          }else{
+            permutations+=sequence;
+          }
+
         }
         sequence = sequence.concat(" ");
       }

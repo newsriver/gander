@@ -188,8 +188,11 @@ class GanderSpec extends Specification {
 
 
   //add this to test title
-  //http://www.deutsche-handwerks-zeitung.de/kumpel-keule-zielgruppe-flexitarier/150/3094/335461
-
+  //http://www.lvz.de/Nachrichten/Wirtschaft/Milliardenklage-gegen-Mastercard-in-Grossbritannien
+  //http://www.brindisireport.it/cronaca/rapinatori-con-lo-scooter-al-supermercato-Dok-di-via-San-Angelo-a-Brindisi.html
+  //http://www.theplayerstribune.com/phil-jackson-shaquille-oneal-lakers-nba-hall-of-fame-2016/
+  //http://www.blick.ch/sport/beachsoccer/ab-auf-die-bahamas-sandgenossen-fliegen-an-die-wm-id5474919.html
+  //http://www.metrord.do/entretencion/kylie-y-kendall-jenner-se-quedaron-atrapadas-en-elevador/WYEpii---7PDwgQm2u8zUGvyE5AF6_A/
 
 
 
