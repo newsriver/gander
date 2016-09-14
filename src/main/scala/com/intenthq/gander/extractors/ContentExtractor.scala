@@ -1,9 +1,6 @@
 package com.intenthq.gander.extractors
 
-import java.net.URL
-import java.text.Normalizer
 import java.util.Date
-import java.util.regex.Pattern
 
 import com.intenthq.gander.Link
 import com.intenthq.gander.opengraph.OpenGraphData
@@ -13,14 +10,12 @@ import com.intenthq.gander.utils.JSoup._
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 import org.jsoup.nodes.{Document, Element}
-import org.jsoup.select.Elements
 import org.slf4j.{Logger, LoggerFactory}
 
-import scala.math.pow
-import scala.math.abs
 import scala.collection.convert.Wrappers.JListWrapper
 import scala.collection.immutable.ListMap
 import scala.collection.mutable
+import scala.math.{abs, pow}
 import scala.util.Try
 
 
@@ -36,69 +31,70 @@ object ContentExtractor {
 
   //TODO: also consider to test title permutations take from the url path
   //in order to achive this we need to further simplify the title and remove all symbold, this simbol less version is than used as key of the hash map
-  def processTitle(rawTitle: String, canonical: Option[String], openGraphData: OpenGraphData, twitterData: TwitterData, doc:Document): String = {
+  def processTitle(rawTitle: String, canonical: Option[String], openGraphData: OpenGraphData, twitterData: TwitterData, doc: Document): String = {
 
-      val grades = collection.mutable.Map[String,Int]()
+    val grades = collection.mutable.Map[String, Int]()
 
-      //create map with words only title to words with symbols§
-      val originalTitle = Map[String,String](titlePermutations(rawTitle,false).toSeq map { a => a.replaceAll("[^\\p{L}]", "_").toUpperCase -> a }: _*)
-      originalTitle.keys.foreach(k =>{
-        addOrUpdate[String,Int](grades, k, k -> 1, (v: Int) => v + 1)
-      })
+    //create map with words only title to words with symbols§
+    val originalTitle = Map[String, String](titlePermutations(rawTitle, false).toSeq map { a => a.replaceAll("[^\\p{L}]", "_").toUpperCase -> a }: _*)
+    originalTitle.keys.foreach(k => {
+      addOrUpdate[String, Int](grades, k, k -> 1, (v: Int) => v + 1)
+    })
 
 
     val hTags = doc.select("h1, h2, h3, h4, h5, h6").iterator()
-    while(hTags.hasNext()){
+    while (hTags.hasNext()) {
       val element = hTags.next()
-      titlePermutations(element.text(),true).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
+      titlePermutations(element.text(), true).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
         !addOrUpdate[String, Int](grades, _, null, (v: Int) => v + 4)
       ).force
     }
+    if (openGraphData.title.isDefined) {
+      titlePermutations(openGraphData.title.get, true).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
+        !addOrUpdate[String, Int](grades, _, null, (v: Int) => v + 1)
+      ).force
+    }
 
-    titlePermutations(openGraphData.title.get,true).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
-      !addOrUpdate[String, Int](grades, _, null, (v: Int) => v + 1)
-    ).force
 
 
-
-    if(canonical != None) {
-      titlePermutations(canonical.get,true).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
+    if (canonical != None) {
+      titlePermutations(canonical.get, true).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
         !addOrUpdate[String, Int](grades, _, null, (v: Int) => v + 2)
       ).force
     }
 
     //Due to twitter chars limit we only cosider it if it is not too shorter than 75% the title lenght
-    if(twitterData.title.isDefined) {
-      titlePermutations(twitterData.title.get,true).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
+    if (twitterData.title.isDefined) {
+      titlePermutations(twitterData.title.get, true).toSeq.sortWith(_.length > _.length).toStream.takeWhile(
         !addOrUpdate[String, Int](grades, _, null, (v: Int) => v + 1)
       ).force
     }
 
-      val title = ListMap(grades.toSeq.sortWith((leftE,rightE) => {
-        if(leftE._2 == rightE._2 ){
-           leftE._1.length() > rightE._1.length
-        }else{
-           leftE._2 > rightE._2
-        }
-      }):_*).iterator.next()._1;
+    val title = ListMap(grades.toSeq.sortWith((leftE, rightE) => {
+      if (leftE._2 == rightE._2) {
+        leftE._1.length() > rightE._1.length
+      } else {
+        leftE._2 > rightE._2
+      }
+    }): _*).iterator.next()._1;
 
 
     return originalTitle.get(title).get;
 
   }
 
-  def titlePermutations(title:String,stripSymbols:Boolean): Set[String] ={
+  def titlePermutations(title: String, stripSymbols: Boolean): Set[String] = {
     var permutations = Set[String]()
     val keywords = title.split("[\\s]+");
     for (i <- 0 until keywords.length) {
       var sequence = ""
       for (j <- i until keywords.length) {
         sequence = sequence.concat(keywords(j));
-        if(!sequence.isEmpty && sequence.length > title.length*MIN_TITLE_PERMUTATION_LENGTH){
-          if(stripSymbols){
-            permutations+=sequence.replaceAll("[^\\p{L}]", "_").toUpperCase;
-          }else{
-            permutations+=sequence;
+        if (!sequence.isEmpty && sequence.length > title.length * MIN_TITLE_PERMUTATION_LENGTH) {
+          if (stripSymbols) {
+            permutations += sequence.replaceAll("[^\\p{L}]", "_").toUpperCase;
+          } else {
+            permutations += sequence;
           }
 
         }
@@ -108,10 +104,18 @@ object ContentExtractor {
     return permutations;
   }
 
-  def addOrUpdate[K, V](m: collection.mutable.Map[K, V], k: K, kv: (K, V),f: V => V) : Boolean = {
-   return m.get(k) match {
-      case Some(e) => {m.update(k, f(e)); return true}
-      case None    => { if(kv!=null){m += kv}; return false}
+  def addOrUpdate[K, V](m: collection.mutable.Map[K, V], k: K, kv: (K, V), f: V => V): Boolean = {
+    return m.get(k) match {
+      case Some(e) => {
+        m.update(k, f(e));
+        return true
+      }
+      case None => {
+        if (kv != null) {
+          m += kv
+        };
+        return false
+      }
     }
   }
 
@@ -122,9 +126,6 @@ object ContentExtractor {
         metaContent("property=og:locale")(doc)
       )
     )
-
-  private def metaContent(metaName: String)(implicit doc: Document): Option[String] =
-    select(s"meta[$metaName]").headOption.map(_.attr("content").trim)
 
   def extractDate(doc: Document): Option[DateTime] = {
     metaContent("property=article:published_time")(doc).orElse(
@@ -153,6 +154,9 @@ object ContentExtractor {
         metaContent("name=twitter:description")
       )
     ).getOrElse("").trim
+
+  private def metaContent(metaName: String)(implicit doc: Document): Option[String] =
+    select(s"meta[$metaName]").headOption.map(_.attr("content").trim)
 
   /**
     * if the article has meta keywords set in the source, use that
