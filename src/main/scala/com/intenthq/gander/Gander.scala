@@ -44,7 +44,7 @@ object Gander {
       val twitterData = TwitterData(doc)
 
       val info = PageInfo(title = rawTitle,
-        processedTitle = processTitle(rawTitle, canonicalLink, openGraphData, twitterData,doc),
+        processedTitle = processTitle(rawTitle, canonicalLink),
         metaDescription = extractMetaDescription(doc),
         metaKeywords = extractMetaKeywords(doc),
         lang = extractLang(doc),

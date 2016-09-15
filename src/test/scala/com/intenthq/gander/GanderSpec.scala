@@ -136,22 +136,7 @@ class GanderSpec extends Specification {
 
   }
 
-  "canarias7" >> {
-    val url = "http://www.canarias7.es/articulo.cfm?Id=434625"
-    check(extract(url, Charsets.UTF_8, "es"),
-      url = url,
-      //content = "La Junta de Portavoces del Congreso, con el apoyo de la mayoría de los grupos salvo el PP, ha acordado que el ministro de Economía, Luis de Guindos, comparezca para explicar el nombramiento y renuncia de José Manuel Soria como director ejecutivo del Banco Mundial en un pleno extraordinario, para el que aún no hay fecha.\n\nLa fecha de la comparecencia de De Guindos deberá fijarla ahora la Mesa del Congreso, que está semana aprobó el calendario de plenos ordinarios de los próximos meses sin contemplar ninguna sesión plenaria extraordinaria.\n\nNo obstante, PSOE y Unidos Podemos han logrado sacar adelante en la Junta de Portavoces su petición para que De Guindos comparezca en un pleno urgente y no en la Comisión de Economía, como había solicitado el ministro. Solicitud que ha contado con el apoyo de Ciudadanos y otros partidos como el PNV, ERC y Partido Demócrata Catalán, que representa al grupo Mixto, según fuentes parlamentarias.",
-      //TODO: improve content extraction
-      content = "",
-      title = "Canarias7. Nacional. El Congreso acuerda que De Guindos explique en un pleno el caso Soria",
-      processedTitle = "El Congreso acuerda que De Guindos explique en un pleno el caso Soria",
-      metaDescription = "La Junta de Portavoces del Congreso, con el apoyo de la mayoría de los grupos salvo el PP, ha acordado que el ministro de Economía, Luis de Guindos, comparezca para explicar el nombramiento y renuncia de José Manuel Soria como director ejecutivo del Banco Mundial en un pleno extraordinario, para el ...",
-      metaKeywords = "Canarias7, prensa, noticias, información, informacion general, Islas Canarias, Canarias, Canary Islands,",
-      lang = Some("es"),
-      date = None,
-      links = List())
 
-  }
 
 
   "www.setal.net" >> {
@@ -172,22 +157,7 @@ class GanderSpec extends Specification {
   }
 
 
-  "www.deutsche-handwerks-zeitung.de" >> {
-    val url = "http://www.deutsche-handwerks-zeitung.de/kumpel-keule-zielgruppe-flexitarier/150/3094/335461"
-    check(extract(url, Charsets.UTF_8),
-      url = url,
-      //TODO: improve content extraction
-      //content="Metzgern kann hip sein. Wichtige Voraussetzung: Zeigen, was man kann und wie es richtig geht. Darauf setzt die Berliner Metzgerei Kumpel & Keule und gewinnt damit Kunden und Azubis.\n\nDas Team von Kumpel & Keule ist stolz, was da in ihrer Fleischtheke liegt: gute Handwerksarbeit. - ©\n\nMittwochnachmittag in der Markthalle Neun in Berlin Kreuzberg. Markttag war gestern. An den Ständen herrscht Aufräumstimmung. Doch ganz hinten in der Halle ist eine Fleischtheke beleuchtet. Jule füllt sie gerade mit dicken Scheiben Rindfleisch auf. Es hat einen ordentlichen Fettrand und der Knochen ist noch nicht gelöst. Auf Wunsch wäre das schnell geändert, doch die Kunden der Metzgerei Kumpel & Keulewollen das Fleisch meist so – wegen des Geschmacks. Sie wollen es zubereiten, das Fett und die Knochen nutzen.\n\nNeben der Fleischtheke ist die Wurstküche, in der Henri gerade dabei ist, Wurstmasse für eine Merguez zu würzen. Die pikante Bratwurst bekommt Chili, geräucherte Paprika, Salz und Pfeffer jeweils aus kleinen Tütchen. Fertige Mischungen sind tabu – genauso wie fertig zerlegtes, bereits bearbeitetes und anonymes Fleisch. Die Qualitätsansprüche der noch ziemlich jungen Berliner Metzgerei sind hoch. Und genau das kommuniziert sie auch gerne: Über 5.000 Fans hat die Metzgerei auf Facebook, über 260 Follower über Twitter.\n\nKumpel & Keule: anklopfen, Fragen stellen\n\nFür die Präsenz in den sozialen Medien sorgt Hendrik Haase, Blogger unter dem Namen Wurstsack, Künstler, Food-Aktivist und Mitgründer von Kumpel & Keule. Hendrik ist Mitorganisator von Schnippeldiskos, bei denen Menschen gemeinsam Gemüsesuppe aus krummen Möhren und übriggebliebenen Kartoffeln kochen, er macht sich für die Initiative Slow Food stark und fürs Metzgerhandwerk.\n\nDass die Mitarbeiter von Kumpel & Keule ihr Handwerk verstehen, möchten sie auch zeigen: Außer dem Lager im Keller der Markthalle haben alle Betriebsräume Glaswände und an den Fronten, an denen die Kunden vorbeilaufen und nicht selten interessiert stehen bleiben, kleine Fenster. Hier kann man anklopfen, Fragen stellen. Hier erklärt Metzgergeselle Henri gerade, welche Gewürze er in dem Fleischteig für die Merguez streut.\n\nDie gläserne Produktion ist quasi der Grundstein der Metzgerei Kumpel & Keule. Bei einem Event der Markthalle Neun, die bekannt ist für ihre Naschmärkte, Streetfood-Abende und für kleine Manufakturen, die hier ihre Kreationen verkaufen, zeigten Hendrik und Metzgermeister Jörg Förstera, der bis zur Gründung von Kumpel & Keule die Fleischabteilung des KaDeWe leitete, wie man Wurst macht und ernteten damit viel Aufmerksamkeit. Es war ihr erstes gemeinsames Projekt und daraus wurde mehr.\n\nShowbühne fürs Metzgerhandwerk\n\nGesucht und gefunden kam es einige Zeit später dazu, dass die beiden ihre eigene Metzgerei eröffneten und hier ihren Kunden zeigen, wie man dem Handwerk eine kleine Showbühne bereiten kann. Inhalt der Show: Tiere zerlegen, zerkleinern, Knochen auslösen, entscheiden, welches Stück Fleisch zu was verarbeitet wird, Wurst herstellen und Burgerpattys. Die Kreuzberger Metzger wollen zeigen, dass hier das ganze Tier verarbeitet wird. Die Tiere kommen hier als ganze Hälften auf den Arbeitstisch. Einige Teile werden einvakumiert. \"An einem Tag ein ganzes Tier zu verkaufen, das schaffen wir noch nicht\", sagt Hendrik.\n\nIn vielem lehnt sich Kumpel & Keule an das klassische Konzept von Metzgereien an: neben der Verkauf von Fleisch und Wurst, gibt es auch eine Imbissstation. Und doch scheint alles ein wenig anders zu laufen bzw. haben die beiden Gründer einen Ansatz, der das Klassische auch kritisieren soll.\n\nAber erst mal zum Imbiss: Bei Kumpel & Keule gibt es Burger. Lange haben die Mitarbeiter gemeinsam am perfekten Patty getüftelt. Es darf nicht zu dünn sein, denn dann wäre es zu trocken, nicht mit der Maschine gepresst, denn das macht es zu fest. \"Das Patty muss noch Struktur haben und es soll im Mund zerfallen\", schwärmt Hendrik und erklärt weiter, warum der Burger absichtlich eher spartanisch gehalten ist: das gute Fleisch soll man schmecken, nicht nur dicke, süße Soßen.\n\nSoße und Brot gehören zum Kumpel & Keule-Burger aber dennoch dazu: handgemacht bzw. mit einem Bäcker extra für den Burger kreiert. Das Patty wird aus dem selben Fleisch hergestellt, das auch als trocken gereiftes Steak in der Auslage liegt und hat deshalb seinen Preis: sieben Euro pro Burger.\n\nDem Absatz tut das aber nichts. Auch an Tagen, an denen die Metzgerei nicht vom Publikum der Markthalle profitieren kann, sondern auch ganz normale Stammkunden und Laufkundschaft setzt, gehen die Burger einer nach dem anderen über den Tresen. Slow Food-Vertreter Hendrik verteidigt das eigentlich typische Fast-Food: \"Auch unseren Burger gibt es auf die Hand, aber es ist ganz viel Slow Food drin.\" Ausschlaggebend sei, wie die Tiere aufgewachsen sind und das Fleisch verarbeitet wurde.\n\nHendrik Haase: \"Zertifizierungen sind nicht alles\"\n\nFür das Fleisch, das fertig bearbeitet in der Auslage landet, gelten bei Kumpel & Keule strenge Auswahlkriterien. Das Wichtigste auch hier: Transparenz. \"Wir schauen uns an, wo und wie die Tiere leben, was sie fressen und wie sie geschlachtet werden\", sagt Hendrik. Das sollen auch die Kunden sehen und so veröffentlicht Hendrik regelmäßig Fotos und kurze Berichte von seinen Besuchen bei den Landwirten im Internet.\n\nRegional und bio sind dabei Kriterien, die zwar wichtig seien, aber nicht als einzige über die Auswahl entscheiden. \"Ich nehme lieber ein Huhn, das noch nie Antibiotika erhalten hat, aber dafür kein Bio-Siegel besitzt, weil sich der kleine Hof die Zertifizierung nicht leisten kann, als eines, das eben gerade das Muss für das staatliche Bio-Siegel erfüllt\", sagt Hendrik mit Nachdruck. Antibiotika ist auch im Bio-Bereich in bestimmten Fällen erlaubt. Solche Kriterien anzulegen, erfordert allerdings eine tiefgehende Auseinandersetzung mit den Erzeugern, eine intensive Suche und den Aufbau langfristiger Kooperationen.\n\nKumpel & Keule setzt zudem auf alte Rassen wie das Schwäbisch Hällische Landschwein oder ein französisches Schwarzfederhuhn, darauf, dass das Fleisch lange reift bis es verarbeitet wird und dass die Tiere möglichst wenig Stress vor dem Schlachten haben. Sie werden extra einen Tag vorher zum Schlachthof gefahren. Die Fahrt dorthin ist nicht länger als ein paar Kilometer. \"Durch den Ruhetag sind die Tiere bei der Schlachtung entspannter, das hat wiederum Auswirkungen auf die Qualität und den Geschmack\", erklärt Hendrik.\n\nMit ihrem Ansatz, die Handgriffe des Berufs wieder stark in den Vordergrund zu stellen, eine Auseinandersetzung mit dem Konsument anzuregen und den Beruf des Metzgers auch im Netz derart hip zu präsentieren, punktet Kumpel & Keule auch beim Nachwuchs. Die eine Lehrstelle, die es eigentlich geben sollte, ist seit vergangenem Jahr besetzt und noch in diesem Jahr kommt eine neue dazu. Das Besondere: es wird eine Azubine, die für die Ausbildung bei Kumpel & Keule ihr Kunststudium abbricht. Ausbilder ist der Firmengründer Jörg Förstera.\n\nBewusster Konsum statt einfach nur vegan\n\nMit mehr Handwerk und mehr Transparenz will Hendrik auch die sogenannten Flexitarier bedienen, von denen es immer mehr gibt. Flexitarier sind Menschen, die lieber weniger und seltener, aber dafür gutes – und meist auch etwas teureres – Fleisch essen. \"Das Bewusstsein der Leute ändert sich, immer mehr hinterfragen, wie die Tiere aufwachsen, was Fleischessen für das Klima und die Tierhaltung für die Landwirtschaft bedeutet.\"\n\nDass im Moment vegane Lebensmittel derzeit gefragt sind, macht es deshalb nicht mutiger, heutzutage eine Metzgerei zu eröffnen. \"Die Zahl der wirklichen Veganer ist nicht so hoch wie es derzeit scheint\", sagt Hendrik. Aber dafür steige die Anzahl derjenigen, die bewusst konsumieren.",
-      content = "",
-      title = "Kumpel & Keule: Zielgruppe Flexitarier - dhz.net",
-      processedTitle = "Kumpel & Keule: Zielgruppe Flexitarier",
-      metaDescription = "Metzgern kann hip sein. Wichtige Voraussetzung: Zeigen, was man kann und wie es richtig geht. Darauf setzt die Berliner Metzgerei Kumpel & Keule und gewinnt dam",
-      metaKeywords = "Metzgerhandwerk, Metzger, Metzgerei, Kumpel & Keule, Wurstsack, Hendrik Haase, Slow Food, Markthalle Neun,",
-      lang = None,
-      date = Some("2016-09-09T12:11:25"),
-      links = List(Link("Metzgerei Kumpel & Keule", "http://www.kumpelundkeule.de/#willkommen")))
 
-  }
 
 
   "lemonde" >> {
@@ -234,21 +204,7 @@ class GanderSpec extends Specification {
 
   }
 
-  "fcbarcelona" >> {
-    val url = "http://www.fcbarcelona.com/club/detail/article/30-years-since-visit-of-pope-john-paul-ii"
 
-    check(extract(url),
-      url = url,
-      content = "On November 7, 1982, the Camp Nou enjoyed a historic moment.",
-      title = "30 years since visit of Pope John Paul II | FC Barcelona",
-      processedTitle = "30 years since visit of Pope John Paul II",
-      metaDescription = "This Wednesday is the 30th anniversary of mass given by Pope John Paul at the Camp Nou",
-      metaKeywords = "Josep Lluís Núñez, Camp Nou, Club, Season 2012-2013",
-      lang = Some("en"),
-      date = None,
-      links = List()
-    )
-  }
 
   "Daily Mail (date is malformed + publish_date misused)" >> {
     val url = "http://www.dailymail.co.uk/news/article-486484/A-spectacular-destruction-How-email-led-downfall-barrister-all.html"
