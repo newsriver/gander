@@ -172,7 +172,7 @@ object ContentExtractor {
   def calculateBestNodeBasedOnClustering(document: Document, lang: String): Option[Element] = {
     implicit val doc = document.clone
 
-    val nodesToCheck = byTag("p") ++ byTag("td") ++ byTag("pre") ++ byTag("strong") ++ byTag("li") ++ byTag("code")
+    val nodesToCheck = byTag("p") ++ byTag("td") ++ byTag("pre") ++ byTag("strong") ++ byTag("li") ++ byTag("code") ++ byTag("span") ++ byTag("blockquote") ++ byTag("h2") ++ byTag("h3") ++ byTag("h4") ++ byTag("h5")
 
     val nodesWithText = nodesToCheck.filter { node =>
       val nodeText = node.text
@@ -229,6 +229,10 @@ object ContentExtractor {
     if (parentNodes.isEmpty)
       None
     else {
+      //This part shuld be improved, we currently select a root element that contains most of the text
+      //However in some cases there are more than 1
+      //We should instead select all the onse with high probability and concatenate them.
+      //However to do so we should be able to marge or exclude the nodes that are already part of the node with the highest score.
       Some(parentNodes.maxBy(getScore)).filter(getScore(_) >= 20)
     }
   }
@@ -301,11 +305,17 @@ object ContentExtractor {
     val limit = 1.0
     val links = byTag("a") ++ byAttr("onclick")
 
+
+
     if (links.isEmpty)
       false
     else {
+      var linksText:String =""
+      links.foreach(e => {
+        linksText = linksText.concat(e.text().concat(" "))
+      })
       val words = e.text.trim.split("\\s+")
-      val linkWords = links.mkString(" ").split("\\s+")
+      val linkWords = linksText.split("\\s+")
       val numberOfLinks = links.size
       val numberOfWords = words.length.toDouble
       val numberOfLinkWords = linkWords.length.toDouble
@@ -333,7 +343,7 @@ object ContentExtractor {
   def postExtractionCleanup(targetNode: Element, lang: String): Element = {
     val node = addSiblings(targetNode, lang)
     JListWrapper(node.children)
-      .filter(e => e.tagName != "p" || isHighLinkDensity(e))
+      .filter(e => (e.tagName != "p" && e.tagName != "span" )|| isHighLinkDensity(e))
       .filter(e => isHighLinkDensity(e) || isTableTagAndNoParagraphsExist(e) || !isNodeScoreThresholdMet(node, e))
       .foreach(remove)
     node
@@ -353,7 +363,7 @@ object ContentExtractor {
     } else false
   }
 
-  private def getChildParagraphs(implicit e: Element): Seq[Element] = byTag("p") ++ byTag("strong")
+  private def getChildParagraphs(implicit e: Element): Seq[Element] = byTag("p") ++ byTag("strong")++ byTag("span")
 
   private def isNodeScoreThresholdMet(node: Element, e: Element): Boolean = {
     val topNodeScore = getScore(node)
