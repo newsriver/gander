@@ -43,18 +43,19 @@ class GanderSpec extends Specification {
   }
 
   "intenthq" >> {
-    val url = "http://engineering.intenthq.com/2015/03/what-is-good-code-a-scientific-definition/"
-    check(extract(url),
-      url = url,
-      content = "Here at Intent HQ we believe how important it is to write good code. Why? First, because writing good code is much cheaper and more fun than writing bad code. Second, because if you write good code chances are that the product you are building will be much better. Third, and more important, because writing good code is what we are supposed to do: after all, we are getting paid for doing our job well",
-      title = "What is good code? A scientific definition. - Intent HQ Engineering blog",
-      processedTitle = "What is good code? A scientific definition.",
-      metaDescription = "How would you define good code? This article gives a pseudo-scientific answer to that question after asking a sample of 65 developers that same question.",
-      metaKeywords = "",
-      lang = Some("en-GB"),
-      date = Some("2015-03-01"),
-      links = List(Link("Uncle Bob", "http://en.wikipedia.org/wiki/Robert_Cecil_Martin"),
-        Link("DRY", "http://en.wikipedia.org/wiki/Don%27t_repeat_yourself")))
+//    val url = "http://engineering.intenthq.com/2015/03/what-is-good-code-a-scientific-definition/"
+//    check(extract(url),
+//      url = url,
+//      content = "Here at Intent HQ we believe how important it is to write good code. Why? First, because writing good code is much cheaper and more fun than writing bad code. Second, because if you write good code chances are that the product you are building will be much better. Third, and more important, because writing good code is what we are supposed to do: after all, we are getting paid for doing our job well",
+//      title = "What is good code? A scientific definition. - Intent HQ Engineering blog",
+//      processedTitle = "What is good code? A scientific definition.",
+//      metaDescription = "How would you define good code? This article gives a pseudo-scientific answer to that question after asking a sample of 65 developers that same question.",
+//      metaKeywords = "",
+//      lang = Some("en-GB"),
+//      date = Some("2015-03-01"),
+//      links = List(Link("Uncle Bob", "http://en.wikipedia.org/wiki/Robert_Cecil_Martin"),
+//        Link("DRY", "http://en.wikipedia.org/wiki/Don%27t_repeat_yourself")))
+    pending
   }
 
   "bbc.com" >> {
